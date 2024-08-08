@@ -19,6 +19,7 @@ class AccountServices {
   static withdraw({ origin, amount }: WithdrawParams) {
     const currentBalance = db.account.getBalance(origin);
     if (currentBalance === null) throw new NotFoundError();
+    if (currentBalance - amount < -150) throw new NotFoundError();
     const newBalance = currentBalance - amount;
     const data = db.account.updateBalance(origin, newBalance);
     return { origin: { id: data.id, balance: data.value } };
